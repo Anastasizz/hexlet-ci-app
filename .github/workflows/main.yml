@@ -1,0 +1,22 @@
+# file: .github/workflows/main.yml
+name: main
+on: push
+jobs:
+  build:
+    # операционная система для работы воркфлоу
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        
+    steps: # список шагов, которые надо выполнить
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm install   
+      - run: make setup
+      - run: make test
+      - run: make lint
